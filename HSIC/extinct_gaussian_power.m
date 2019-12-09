@@ -1,46 +1,39 @@
-% Experiment parameters.
-sampleSizes = 1200;
-numSims = 300;
-alpha=0.05;
-processes = ["nonlin_dependence_phi_0.20", ...
-    "nonlin_dependence_phi_0.30", ...
-    "nonlin_dependence_phi_0.40", ...
-    "nonlin_dependence_phi_0.50", ...
-    "nonlin_dependence_phi_0.60", ...
-    "nonlin_dependence_phi_0.70", ...
-    "nonlin_dependence_phi_0.80", ...
-    "nonlin_dependence_phi_0.95"];
-
-
 % Setup.
 % Determine where your m-file's folder is.
 folder = fileparts(which(mfilename)); 
 % Add that folder plus all subfolders to the path.
 addpath(genpath(folder));
 rng('default')
-tic
-numShuffles = 1500;
-powers = zeros(length(processes), 2);
 
-pool = parpool;
-parfor i = 1:length(processes);
-    process = processes(i);
-    name = split(process, "_");
-    rate = str2double(name(4));
-    
-    dat = load(sprintf('../extinction_data/%s_data.mat', process));
-    fprintf("PROCESS: %s\n", process);
+% Experiment parameters.
+sampleSizes = 1200;
+numSims = 300;
+alpha=0.05;
+phis = 0.2:0.025:.975;
+numShuffles = 1500;
+
+dataPath = "../data/extinct_rates/extinct_gaussian_phi_%s_data.mat";
+powers = zeros(length(phis), 2);
+
+tic
+
+pool = parpool(4);
+parfor i = 1:length(phis)
+    phi = phis(i);
+    rate = num2str(phi, "%.3f");
+    process = sprintf(dataPath, rate);
+
+    dat = load(process);
+    fprintf("PROCESS: %s\n", phis(i));
 
     % Load data generated in Python.
     X_full = dat.X_full;
     Y_full = dat.Y_full;
 
     tic
-    fprintf("SAMPLE_SIZE: %d\n", sampleSizes);
     partialResults = zeros(numSims, 1);
 
     bootstrapedValuesShift=[];
-
     for s=1:numSims
         X = X_full(:, s);
         Y = Y_full(:, s);
@@ -54,13 +47,15 @@ parfor i = 1:length(processes);
         partialResults(s) = bootShift.areDependent;
     end           
     toc
-    powers(i, :) = [rate, mean(partialResults)];
-end           
+    powers(i, :) = [phi, mean(partialResults)];
+    %disp(powers)
+end
+
 toc
 
 delete(pool)
 
-filename = sprintf("power_curves/shiftHSIC_powers_extinct_gaus.mat");
+filename = sprintf("power_curves/shiftHSIC_powers_extinct_gaussian.mat");
 save(filename,'powers')
 
 disp(powers)
