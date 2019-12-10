@@ -1,14 +1,11 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 from joblib import Parallel, delayed
 from scipy.io import loadmat, savemat
 
-from mgcpy.benchmarks.ts_benchmarks import NonlinearDependence
 from mgcpy.independence_tests.dcorrx import DCorrX
 from mgcpy.independence_tests.mgcx import MGCX
 from mgcpy.independence_tests.xcorr import BoxPierceX, LjungBoxX
@@ -99,10 +96,9 @@ def main(task_index):
         },
     ]
 
-    p = Path("~mgcx_experiments/mgcx_experiments/data/extinction_rates/")
+    p = Path("../../data/extinct_rates")
     processes = sorted(p.glob("*mat"))
-
-    process = processes[task_index]
+    process = processes[int(task_index)]
     phi = process.name.split("_")[-2]
     df = pd.DataFrame([phi], columns=["extinction_rate"])
 
