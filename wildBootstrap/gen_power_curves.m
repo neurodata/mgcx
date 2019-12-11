@@ -1,8 +1,7 @@
 % Experiment parameters.
-sampleSizes = 10:10:100;
+sampleSizes = 10:10:200;
 alpha=0.05;
-processes = ["econometric_proc"];
-% processes = ["indep_ar1", "corr_ar1", "econometric_proc", "dynamic_proc"];
+processes = ["indep_ar1", "corr_ar1", "nonlin_lag1", "econometric_proc"];
 
 % Setup.
 % Determine where your m-file's folder is.
@@ -16,8 +15,7 @@ powers = zeros(length(sampleSizes), 2);
 %pool = parpool;
 %parfor process = processes
 for process = processes
-    
-    dat = load(sprintf('data/%s_data.mat', process));
+    dat = load(sprintf('../data/%s_data.mat', process));
     fprintf("PROCESS: %s\n", process);
 
     % Load data generated in Python.
@@ -38,9 +36,9 @@ for process = processes
         end           
         toc
         powers(i, :) = [n, mean(partialResults)];
+        disp(powers(1:i, :));
     end
     filename = sprintf("power_curves/wildHSIC_powers_%s.mat", process);
-    disp(powers)
     save(filename,'powers')
 end
 toc
