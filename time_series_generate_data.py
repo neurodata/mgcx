@@ -65,12 +65,15 @@ def generate_varying_indep_ars(phis, n_max, num_sims, output_dir="./data/ars/"):
     phis = list
     """
     for phi in phis:
+        sigma = np.sqrt(1 - phi ** 2)
         process = IndependentAR1()
 
         X_full = np.zeros((n_max, num_sims))
         Y_full = np.zeros((n_max, num_sims))
         for s in range(num_sims):
-            X_full[:, s], Y_full[:, s] = process.simulate(n=n_max, phi=phi)
+            X_full[:, s], Y_full[:, s] = process.simulate(
+                n=n_max, phi=phi, sigma2=sigma
+            )
 
         # Save to MATLAB format as well.
         p = Path(output_dir)
