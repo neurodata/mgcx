@@ -14,5 +14,5 @@ module load python/3.7
 source ~/mgcx_experiments/env/bin/activate
 
 echo "My SLURM_ARRAY_TASK_ID: " $SLURM_ARRAY_TASK_ID
-python3 extinction_rate.py $SLURM_ARRAY_TASK_ID
+python3 independent_ars.py $SLURM_ARRAY_TASK_ID
 echo "job complete"
