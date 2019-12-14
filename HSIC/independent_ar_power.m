@@ -39,11 +39,12 @@ parfor i = 1:length(phis)
         Y = Y_full(:, s);
         sigX = median_heur(X);
         sigY = median_heur(Y);
-        if mod(s-1,10)==0
-            [bootShift,bootstrapedValuesShift] = customShiftHSIC(X,Y,alpha,50,min(sampleSizes, numShuffles),sigX,sigY);   
-        else
-            bootShift = customShiftHSIC(X,Y,alpha,50,min(sampleSizes, numShuffles),sigX,sigY,bootstrapedValuesShift); 
-        end       
+%         if mod(s-1,10)==0
+%             [bootShift,bootstrapedValuesShift] = customShiftHSIC(X,Y,alpha,50,min(sampleSizes, numShuffles),sigX,sigY);   
+%         else
+%             bootShift = customShiftHSIC(X,Y,alpha,50,min(sampleSizes, numShuffles),sigX,sigY,bootstrapedValuesShift); 
+%         end
+        [bootShift,bootstrapedValuesShift] = customShiftHSIC(X,Y,alpha,50,min(sampleSizes, numShuffles),sigX,sigY);
         partialResults(s) = bootShift.areDependent;
     end           
     toc

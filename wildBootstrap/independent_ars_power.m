@@ -16,9 +16,9 @@ dataPath = "../data/ars/indep_ar1_phi_%s_data.mat";
 tic
 powers = zeros(length(phis), 2);
 
-%pool = parpool(4);
-%parfor i = 1:length(phis)
-for i = 1:length(phis)
+pool = parpool(4);
+parfor i = 1:length(phis)
+%for i = 1:length(phis)
     phi = phis(i);
     rate = num2str(phis(i), "%.3f");
     process = sprintf(dataPath, rate);
