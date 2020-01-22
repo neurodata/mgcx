@@ -107,7 +107,7 @@ def main(task_index):
         powers = np.zeros(1)
         stds = np.zeros(1)
 
-        print(f"Extinction Rate: {phi}")
+        print(f"AR Coefficient: {phi}")
         data = loadmat(process)
         X_full = data["X_full"]
         Y_full = data["Y_full"]
