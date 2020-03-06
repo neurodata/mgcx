@@ -10,7 +10,7 @@ sampleSizes = 1200;
 nSims = 300;
 alpha=0.05;
 phis = 0.1:0.05:.95;
-nCores = 44;
+nCores = 4;
 
 dataPath = "../data/ars/indep_ar1_phi_%s_data.mat";
 
@@ -44,7 +44,7 @@ parfor i = 1:length(phis)
     for s=1:numSims
         X = X_full(:, s);
         Y = Y_full(:, s);
-        partialResults(s) = wildHSIC(X,Y,'Test',1).reject;
+        partialResults(s) = wildHSIC(X,Y,'Test',1,'NumBootstrap',100).reject;
     end           
     toc
     powers(i, :) = [phis(i), mean(partialResults)];
@@ -88,7 +88,7 @@ parfor i = 1:length(phis)
     for s=1:numSims
         X = X_full(:, s);
         Y = Y_full(:, s);
-        partialResults(s) = wildHSIC(X,Y,'Test',2).reject;
+        partialResults(s) = wildHSIC(X,Y,'Test',2,'NumBootstrap',100).reject;
     end           
     toc
     powers(i, :) = [phis(i), mean(partialResults)];
