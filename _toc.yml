@@ -1,0 +1,6 @@
+format: jb-book
+root: README
+parts:
+  - caption: Figures
+    chapters:
+      - url: figure1
