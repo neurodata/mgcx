@@ -13,5 +13,5 @@ Complex data structures such as time series are increasingly more prevalent in m
 - Navigate to a directory where you want to store the project, and clone this repo:
 
 ```
-git clone https://github.com/neurodata/bilateral-connectome
+git clone https://github.com/neurodata/mgcx
 ```
