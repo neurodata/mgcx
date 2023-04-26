@@ -1,6 +1,9 @@
 format: jb-book
-root: README
+root: coverpage
 parts:
-  - caption: Figures
+  - caption: Code
     chapters:
-      - url: figure1
+      - file: data
+        title: Generating Data for Simulation Analysis
+      - file: figure1
+        title: Analyzing Independent AR(1) Processes
