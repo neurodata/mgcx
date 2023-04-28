@@ -1,6 +1,0 @@
-[submodule "wildBootstrap"]
-	path = wildBootstrap
-	url = https://github.com/kacperChwialkowski/wildBootstrap
-[submodule "HSIC"]
-	path = HSIC
-	url = https://github.com/kacperChwialkowski/HSIC
