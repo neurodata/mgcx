@@ -171,8 +171,10 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="data.html">Generating Data for Simulation Analysis</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Analyzing Independent AR(1) Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Generating data for analysis</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparing the False Positive Rate (Type I) Under the Null</a></li>
+
 </ul>
 
     </div>
@@ -343,7 +345,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -359,6 +363,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Comparing the False Positive Rate (Type I) Under the Null</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#var-1">VAR(1)</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -371,8 +385,8 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="comparing-the-false-positive-rate-type-i-under-the-null">
 <h1>Comparing the False Positive Rate (Type I) Under the Null<a class="headerlink" href="#comparing-the-false-positive-rate-type-i-under-the-null" title="Permalink to this heading">#</a></h1>
 <p>The purpose of this simulation is to confirm the validity of the test, and thus, we expect the testing power to be close to the significance level <span class="math notranslate nohighlight">\(\alpha\)</span>. Here we use the independent AR(1) processes, and the sampling process is:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-fb58aa95-eb02-445f-8534-03ee3456be51">
-<span class="eqno">(1)<a class="headerlink" href="#equation-fb58aa95-eb02-445f-8534-03ee3456be51" title="Permalink to this equation">#</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-79531b77-7025-4948-af01-7c90fa4f5648">
+<span class="eqno">(1)<a class="headerlink" href="#equation-79531b77-7025-4948-af01-7c90fa4f5648" title="Permalink to this equation">#</a></span>\[\begin{equation}
 \begin{bmatrix}
 X_t\\
 Y_t
@@ -400,12 +414,16 @@ Y_{t-1}
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">hyppo.time_series</span> <span class="kn">import</span> <span class="n">DcorrX</span><span class="p">,</span> <span class="n">MGCX</span><span class="p">,</span> <span class="n">LjungBox</span>
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+
+<span class="kn">from</span> <span class="nn">hyppo.time_series</span> <span class="kn">import</span> <span class="n">MGCX</span><span class="p">,</span> <span class="n">DcorrX</span><span class="p">,</span> <span class="n">LjungBox</span>
+
+<span class="n">test_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;LjungBox&quot;</span><span class="p">:</span> <span class="n">LjungBox</span><span class="p">,</span> <span class="s2">&quot;DcorrX&quot;</span><span class="p">:</span> <span class="n">DcorrX</span><span class="p">,</span> <span class="s2">&quot;MGCX&quot;</span><span class="p">:</span> <span class="n">MGCX</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -413,48 +431,32 @@ Y_{t-1}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s2">&quot;./data/1-independent_ar_n.mat&quot;</span><span class="p">)</span>
-
-<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span>
-
-<span class="n">n_reps</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="n">ns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># pvalue</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_dict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;LjungBox&quot;</span><span class="p">:</span> <span class="n">LjungBox</span><span class="p">,</span>
-    <span class="s2">&quot;DcorrX&quot;</span><span class="p">:</span> <span class="n">DcorrX</span><span class="p">,</span>
-    <span class="s2">&quot;MGCX&quot;</span><span class="p">:</span> <span class="n">MGCX</span>
-<span class="p">}</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># pvalue</span>
+
+
+<span class="c1"># load data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s2">&quot;./data/1-independent_ar_n.mat&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span>
+
+<span class="c1"># parameters</span>
+<span class="n">n_reps</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 
 <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
-
 <span class="k">for</span> <span class="n">test_name</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">test_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="c1"># if test_name == &quot;LjungBox&quot;:</span>
-    <span class="c1">#     auto=True</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     auto=False</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">test</span><span class="p">(</span><span class="n">max_lag</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span>
+        <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">test</span><span class="p">(</span><span class="n">max_lag</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ns</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_reps</span><span class="p">)</span>
+    <span class="p">)</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s1">&#39;pval&#39;</span><span class="p">])</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_name</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_name</span>
     <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -462,27 +464,90 @@ Y_{t-1}
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=-2)]: Using backend LokyBackend with 11 concurrent workers.
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># pvalue</span>
+
+
+<span class="c1"># load data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s2">&quot;./data/2-independent_ar_phi.mat&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span>
+<span class="n">phis</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span>
+
+<span class="c1"># parameters</span>
+<span class="n">n_reps</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">test_name</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">test_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span>
+        <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">Y</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">test</span><span class="p">(</span><span class="n">max_lag</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">phis</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">phis</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_reps</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">,</span> <span class="s2">&quot;phi&quot;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_name</span>
+    <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;./outs/indep_ar_phi.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=-2)]: Done   2 out of   6 | elapsed:    1.7s remaining:    3.4s
-[Parallel(n_jobs=-2)]: Done   3 out of   6 | elapsed:    1.7s remaining:    1.7s
-[Parallel(n_jobs=-2)]: Done   4 out of   6 | elapsed:    1.7s remaining:    0.9s
-[Parallel(n_jobs=-2)]: Done   6 out of   6 | elapsed:    1.7s remaining:    0.0s
-[Parallel(n_jobs=-2)]: Done   6 out of   6 | elapsed:    1.7s finished
-[Parallel(n_jobs=-2)]: Using backend LokyBackend with 11 concurrent workers.
-[Parallel(n_jobs=-2)]: Done   2 out of   6 | elapsed:   20.7s remaining:   41.4s
-[Parallel(n_jobs=-2)]: Done   3 out of   6 | elapsed:   20.8s remaining:   20.8s
-[Parallel(n_jobs=-2)]: Done   4 out of   6 | elapsed:   20.8s remaining:   10.4s
-[Parallel(n_jobs=-2)]: Done   6 out of   6 | elapsed:   20.9s remaining:    0.0s
-[Parallel(n_jobs=-2)]: Done   6 out of   6 | elapsed:   20.9s finished
-[Parallel(n_jobs=-2)]: Using backend LokyBackend with 11 concurrent workers.
-[Parallel(n_jobs=-2)]: Done   2 out of   6 | elapsed:    8.4s remaining:   16.9s
-[Parallel(n_jobs=-2)]: Done   3 out of   6 | elapsed:    8.5s remaining:    8.5s
-[Parallel(n_jobs=-2)]: Done   4 out of   6 | elapsed:   10.6s remaining:    5.3s
-[Parallel(n_jobs=-2)]: Done   6 out of   6 | elapsed:   11.1s remaining:    0.0s
-[Parallel(n_jobs=-2)]: Done   6 out of   6 | elapsed:   11.1s finished
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parallel(n_jobs=-2)]: Using backend LokyBackend with 95 concurrent workers.
+[Parallel(n_jobs=-2)]: Done  10 tasks      | elapsed:    2.3s
+[Parallel(n_jobs=-2)]: Done 300 out of 300 | elapsed:    2.8s finished
+[Parallel(n_jobs=-2)]: Using backend LokyBackend with 95 concurrent workers.
+[Parallel(n_jobs=-2)]: Done  10 tasks      | elapsed:   37.9s
+[Parallel(n_jobs=-2)]: Done 300 out of 300 | elapsed:  1.2min finished
+[Parallel(n_jobs=-2)]: Using backend LokyBackend with 95 concurrent workers.
+[Parallel(n_jobs=-2)]: Done  10 tasks      | elapsed:  4.1min
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="var-1">
+<h1>VAR(1)<a class="headerlink" href="#var-1" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># pvalue</span>
+
+
+<span class="c1"># load data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s2">&quot;./data/6-independent_var_n.mat&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span>
+
+<span class="c1"># parameters</span>
+<span class="n">n_reps</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">test_name</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">test_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span>
+        <span class="n">delayed</span><span class="p">(</span><span class="n">worker</span><span class="p">)(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">,</span> <span class="p">:],</span> <span class="n">test</span><span class="p">(</span><span class="n">max_lag</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ns</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_reps</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_name</span>
+    <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;./outs/indep_var_n.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -534,6 +599,22 @@ Y_{t-1}
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Comparing the False Positive Rate (Type I) Under the Null</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#var-1">VAR(1)</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>

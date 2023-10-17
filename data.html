@@ -170,8 +170,10 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Generating Data for Simulation Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="figure1.html">Analyzing Independent AR(1) Processes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Generating data for analysis</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="figure1.html">Comparing the False Positive Rate (Type I) Under the Null</a></li>
+
 </ul>
 
     </div>
@@ -365,12 +367,17 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Generating data for analysis</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-1-independent-ar-1-with-increasing-sample-size">Generate Experiment 1 - Independent AR(1) with increasing sample size.</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-2-independent-ar-1-with-increasing-phi">Generate Experiment 2 - Independent AR(1) with increasing phi.</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-3-linear-cross-correlated-ar-1-with-increasing-sample-size">Generate Experiment 3 - Linear cross correlated AR(1) with increasing sample size</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-4-non-linearly-cross-correlated-ar-1-with-increasing-sample-size">Generate Experiment 4 - Non-linearly cross correlated AR(1) with increasing sample size</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-5-non-linearly-cross-correlated-ar-1-with-increasing-sample-size">Generate Experiment 5 - Non-linearly cross correlated AR(1) with increasing sample size</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-6-independent-vector-ar-1-with-increasing-sample-size">Generate Experiment 6 - Independent Vector AR(1) with increasing sample size</a></li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -385,9 +392,11 @@ document.write(`
 <h1>Generating data for analysis<a class="headerlink" href="#generating-data-for-analysis" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
 <span class="kn">from</span> <span class="nn">hyppo.tools</span> <span class="kn">import</span> <span class="n">ts_sim</span>
 
 <span class="n">TS_SIMS</span> <span class="o">=</span> <span class="p">[</span>
@@ -422,12 +431,12 @@ document.write(`
 <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
 
 <span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">X</span><span class="p">,</span>
-    <span class="s1">&#39;Y&#39;</span> <span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
+    <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+    <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># save to disk</span>
-<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s1">.mat&#39;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.mat&quot;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -439,9 +448,9 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;2-independent_ar_phi&quot;</span>
 
-<span class="n">n</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">reps</span> <span class="o">=</span> <span class="mi">300</span>
-<span class="n">phis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">)</span>
+<span class="n">phis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
 <span class="n">sigmas</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">phis</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -450,22 +459,20 @@ document.write(`
 <span class="n">Ys</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">phis</span><span class="p">,</span> <span class="n">sigmas</span><span class="p">):</span>
-    <span class="n">datas</span> <span class="o">=</span> <span class="p">[</span><span class="n">ts_sim</span><span class="p">(</span><span class="s2">&quot;indep_ar&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">phi</span><span class="p">),</span> <span class="n">sigma</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">)]</span>
-    <span class="n">Xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">]))</span>
-    <span class="n">Ys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">]))</span>
+    <span class="n">datas</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">ts_sim</span><span class="p">(</span><span class="s2">&quot;indep_ar&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">phi</span><span class="p">),</span> <span class="n">sigma</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">Xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">]))</span>
+    <span class="n">Ys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">]))</span>
 
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">Xs</span><span class="p">)</span>
 <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">Ys</span><span class="p">)</span>
 
-<span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">X</span><span class="p">,</span>
-    <span class="s1">&#39;Y&#39;</span> <span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
-    <span class="s1">&#39;phi&#39;</span><span class="p">:</span> <span class="n">phis</span>
-<span class="p">}</span>
+<span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">Y</span><span class="p">,</span> <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="n">phis</span><span class="p">}</span>
 
 <span class="c1"># save to disk</span>
-<span class="c1"># sp.io.savemat(f&#39;{p}{fname}.mat&#39;, savedict, do_compression=True)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.mat&quot;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -484,16 +491,16 @@ document.write(`
 
 <span class="n">datas</span> <span class="o">=</span> <span class="p">[</span><span class="n">ts_sim</span><span class="p">(</span><span class="s2">&quot;cross_corr_ar&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">)]</span>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
 
 <span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">X</span><span class="p">,</span>
-    <span class="s1">&#39;Y&#39;</span> <span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
+    <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+    <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># save to disk</span>
-<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s1">.mat&#39;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.mat&quot;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -512,16 +519,16 @@ document.write(`
 
 <span class="n">datas</span> <span class="o">=</span> <span class="p">[</span><span class="n">ts_sim</span><span class="p">(</span><span class="s2">&quot;nonlinear_process&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">)]</span>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
 
 <span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">X</span><span class="p">,</span>
-    <span class="s1">&#39;Y&#39;</span> <span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
+    <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+    <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># save to disk</span>
-<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s1">.mat&#39;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.mat&quot;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -540,21 +547,24 @@ document.write(`
 
 <span class="n">datas</span> <span class="o">=</span> <span class="p">[</span><span class="n">ts_sim</span><span class="p">(</span><span class="s2">&quot;extinct_gaussian_process&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">)]</span>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
 
 <span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">X</span><span class="p">,</span>
-    <span class="s1">&#39;Y&#39;</span> <span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
+    <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+    <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># save to disk</span>
-<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s1">.mat&#39;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.mat&quot;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Generate Experiment 6 - Independent Vector AR(1) with increasing sample size</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="generate-experiment-6-independent-vector-ar-1-with-increasing-sample-size">
+<h1>Generate Experiment 6 - Independent Vector AR(1) with increasing sample size<a class="headerlink" href="#generate-experiment-6-independent-vector-ar-1-with-increasing-sample-size" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">indep_var</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -562,8 +572,8 @@ document.write(`
 <span class="sd">    d : corresponds to dimension of the time series</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rng</span> <span class="o">=</span> <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi</span>
-    <span class="n">covar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">phi</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi</span>
+    <span class="n">covar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">phi</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="n">covar</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
     <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
@@ -596,12 +606,12 @@ document.write(`
 <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">])</span>
 
 <span class="n">savedict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;X&#39;</span> <span class="p">:</span> <span class="n">X</span><span class="p">,</span>
-    <span class="s1">&#39;Y&#39;</span> <span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
+    <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+    <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="n">Y</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># save to disk</span>
-<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s1">.mat&#39;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.mat&quot;</span><span class="p">,</span> <span class="n">savedict</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -618,7 +628,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -684,12 +693,17 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Generating data for analysis</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-1-independent-ar-1-with-increasing-sample-size">Generate Experiment 1 - Independent AR(1) with increasing sample size.</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-2-independent-ar-1-with-increasing-phi">Generate Experiment 2 - Independent AR(1) with increasing phi.</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-3-linear-cross-correlated-ar-1-with-increasing-sample-size">Generate Experiment 3 - Linear cross correlated AR(1) with increasing sample size</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-4-non-linearly-cross-correlated-ar-1-with-increasing-sample-size">Generate Experiment 4 - Non-linearly cross correlated AR(1) with increasing sample size</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-5-non-linearly-cross-correlated-ar-1-with-increasing-sample-size">Generate Experiment 5 - Non-linearly cross correlated AR(1) with increasing sample size</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-experiment-6-independent-vector-ar-1-with-increasing-sample-size">Generate Experiment 6 - Independent Vector AR(1) with increasing sample size</a></li>
+</ul>
+
   </nav></div>
 
 </div></div>
